@@ -5,12 +5,32 @@
 
 void
 os_init(void) {
+    int len;
 	init_seg();
 	init_debug();
 	init_idt();
 	init_i8259();
 	printk("The OS is now working!\n");
-	sti();
+    len = printk("char test %c",'a');
+    printk("  length is %d\n",len); 
+    len = printk("string test %s","hello world");
+    printk("  length is %d\n",len); 
+    len = printk("string test %s","");
+    printk("  length is %d\n",len); 
+    len = printk("int test %d",-1234567);
+    printk("  length is %d\n",len); 
+    len = printk("int test %d",0);
+    printk("  length is %d\n",len); 
+    len = printk("HEX test %x",1234567);
+    printk("  length is %d\n",len); 
+    len = printk("HEX test %x",-1234567);
+    printk("  length is %d\n",len); 
+	printk("^__^            \n");
+	printk("(oo)\\_______    \n");
+	printk("(__)\\       )/\\/\n");
+	printk("    ||----w |    \n");
+	printk("    ||     ||    \n");
+    sti();
 	while (TRUE) {
 		wait_intr();
 	}
