@@ -24,8 +24,10 @@ os_init(void) {
     len = printk("HEX test %x",1234567);
     printk("  length is %d\n",len); 
     len = printk("HEX test %x",-1234567);
-    printk("  length is %d\n",len); 
-	printk("^__^            \n");
+    printk("  length is %d\n",len);
+    len = printk("mutitransform test %d %s %c %x",1234,"5678",'a',0x89);
+    printk("  length is %d\n",len);
+    printk("^__^            \n");
 	printk("(oo)\\_______    \n");
 	printk("(__)\\       )/\\/\n");
 	printk("    ||----w |    \n");
