@@ -1,6 +1,5 @@
 #include "x86.h"
 #include "kernel.h"
-
 void irq_handle(TrapFrame *tf) {
 	int irq = tf->irq;
 	assert(irq >= 0);
@@ -14,6 +13,10 @@ void irq_handle(TrapFrame *tf) {
 		panic("unexpected exception");
 	} else if (irq >= 1000) {
 		// external interrupt
+        if ( current_pcb != NULL )
+            current_pcb->tf = tf;
+        schedule();
+        current_pcb = next_process();
 	}
 }
 
