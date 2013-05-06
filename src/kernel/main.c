@@ -10,6 +10,12 @@ os_init(void) {
 	init_idt();
 	init_i8259();
 	printk("The OS is now working!\n");
+    int *a = (int *)malloc(10*sizeof(int));
+    int *b = (int *)malloc(10*sizeof(int));
+    int *c = (int *)malloc(10*sizeof(int));
+    printk("%x %x %x\n",a,b,c);
+    while((c = (int *)malloc(sizeof(int))) != NULL)
+        printk("%x\n",c);
 	sti();
 	while (TRUE) {
 		wait_intr();

@@ -17,6 +17,7 @@
  */
 
 #include "malloc.h"
+#include "debug.h"
 
 #define num_page 100
 #define sum_page_size 4095//1+2+4+8+......+2048
@@ -55,12 +56,13 @@ page_init(void){
         pa_perlevel = pa;
         nextf[i] = (overhead *) pa_perlevel;
         nmalloc[i] = num_page;
-        pa += step(i);
-        for ( ; pa < pa_perlevel + step(i) * num_page ; pa += step(i) ){
+        do {
+            pa += step(i);
             ov->ov_next = (overhead *)pa;
             ov = ov->ov_next;
-        }
+        }while(pa < pa_perlevel + step(i)*num_page);
     }
+    ov->ov_next = NULL;
 }
 
 void *
@@ -68,12 +70,18 @@ malloc(uint32_t nbyte){
     assert(nbyte > 0 && nbyte <= (1 << (MAXBUCKET + 2)));
     overhead *op = NULL;
     uint32_t bucket;
+#ifdef MALLOC_DEBUG
+    int i = 0;
+#endif
 
     if (page_inited == FALSE){//first malloc init page
         page_init();
         page_inited = TRUE;
     }
-
+#ifdef MALLOC_DEBUG
+    for(op = nextf[0];op!=NULL;op = op->ov_next , i++)
+        printk("%x %d %d\n",op,i,(uint8_t*)op->ov_next - (uint8_t*)op);
+#endif
     bucket = get_bucket(nbyte);
     assert(bucket >= 0 && bucket < MAXBUCKET);
     if (nmalloc[bucket] == 0)

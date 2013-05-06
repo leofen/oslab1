@@ -40,6 +40,8 @@ vfprintf(void (*putchar_func)(char), const char *format, void **data) {
                       buf_str = itoa(buf_int,10);put_string;break;
             case 'x': buf_unsigned_int = va_args(data,unsigned int);
                       buf_str = utoa(buf_unsigned_int,16);put_string;break;
+            case 'u': buf_unsigned_int = va_args(data,unsigned int);
+                      buf_str = utoa(buf_unsigned_int,10);put_string;break;
             default: assert(FALSE);break;//wrong input
         }
     }
