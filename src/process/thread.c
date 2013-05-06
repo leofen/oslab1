@@ -20,5 +20,6 @@
 
 PCB *
 create_kthread(void *entry){
-
+    PCB *kt = NULL;
+    return kt;
 }

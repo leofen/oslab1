@@ -10,6 +10,7 @@
 #include "vm.h"
 #include "adt/list.h"
 #include "thread.h"
+#include "malloc.h"
 
 void panic(const char *text);
 
