@@ -28,8 +28,8 @@ LD	Makefile	/^LD      = ld$/;"	m
 LDFLAGS	Makefile	/^LDFLAGS = -melf_i386$/;"	m
 ListHead	include/adt/list.h	/^struct ListHead {$/;"	s
 ListHead	include/adt/list.h	/^typedef struct ListHead ListHead;$/;"	t	typeref:struct:ListHead
-MAGIC	include/malloc.h	7;"	d
-MAXBUCKET	include/malloc.h	8;"	d
+MAGIC	include/malloc.h	8;"	d
+MAXBUCKET	include/malloc.h	9;"	d
 MEM_MAX	include/vm.h	5;"	d
 NR_IRQ	include/x86.h	56;"	d
 NR_PDE	include/x86.h	28;"	d
@@ -1132,6 +1132,7 @@ esp_	include/x86.h	/^	uint32_t edi, esi, ebp, esp_;$/;"	m	struct:TrapFrame
 filesz	boot/boot.h	/^	unsigned int filesz;$/;"	m	struct:ProgramHeader
 flags	boot/boot.h	/^	unsigned int   flags;$/;"	m	struct:ELFHeader
 flags	boot/boot.h	/^	unsigned int flags;$/;"	m	struct:ProgramHeader
+free	src/lib/malloc.c	/^free(void * fp){$/;"	f
 fs	include/x86.h	/^	uint32_t gs, fs, es, ds;       \/\/ Segment register$/;"	m	struct:TrapFrame
 g	include/x86.h	/^	uint32_t g : 1;          \/\/ Granularity: limit scaled by 4K when set$/;"	m	struct:SegDesc
 gdt	boot/start.S	/^gdt:$/;"	l
@@ -1178,13 +1179,13 @@ malloc	src/lib/malloc.c	/^malloc(uint32_t nbyte){$/;"	f
 memcpy	src/lib/string.c	/^memcpy(void *dst, const void *src, size_t count) {$/;"	f
 memset	src/lib/string.c	/^memset(void *dst, int val, size_t count) {$/;"	f
 memsz	boot/boot.h	/^	unsigned int memsz;$/;"	m	struct:ProgramHeader
-min_page	src/lib/malloc.c	23;"	d	file:
+min_page	src/lib/malloc.c	24;"	d	file:
 negative	kernel.asm	/^		negative = TRUE;$/;"	d
 next	include/adt/list.h	/^	struct ListHead *prev, *next;$/;"	m	struct:ListHead	typeref:struct:ListHead::
 next_process	src/process/schedule.c	/^next_process(void){$/;"	f
-nextf	src/lib/malloc.c	/^overhead * nextf[MAXBUCKET];$/;"	v
-nmalloc	src/lib/malloc.c	/^uint32_t nmalloc[MAXBUCKET];$/;"	v
-num_page	src/lib/malloc.c	21;"	d	file:
+nextf	src/lib/malloc.c	/^static overhead * nextf[MAXBUCKET];$/;"	v	file:
+nmalloc	src/lib/malloc.c	/^static uint32_t nmalloc[MAXBUCKET];$/;"	v	file:
+num_page	src/lib/malloc.c	22;"	d	file:
 off	boot/boot.h	/^	unsigned int off;$/;"	m	struct:ProgramHeader
 off_15_0	include/x86.h	/^	uint32_t off_15_0 : 16;   \/\/ Low 16 bits of offset in segment$/;"	m	struct:GateDesc
 off_31_16	include/x86.h	/^	uint32_t off_31_16 : 16;  \/\/ High bits of offset in segment$/;"	m	struct:GateDesc
@@ -1192,20 +1193,20 @@ os_init	src/kernel/main.c	/^os_init(void) {$/;"	f
 out_byte	boot/boot.h	/^out_byte(short port, char data) {$/;"	f
 out_byte	include/x86.h	/^out_byte(uint16_t port, uint8_t data) {$/;"	f
 out_long	include/x86.h	/^out_long(uint16_t port, uint32_t data) {$/;"	f
-ov_magic	include/malloc.h	10;"	d
+ov_bucket	include/malloc.h	12;"	d
+ov_magic	include/malloc.h	11;"	d
 ov_next	include/malloc.h	/^    union overhead * ov_next;$/;"	m	union:overhead	typeref:union:overhead::overhead
-ov_size	include/malloc.h	11;"	d
 overhead	include/malloc.h	/^typedef union overhead{$/;"	u
 overhead	include/malloc.h	/^}overhead;$/;"	t	typeref:union:overhead
 ovu	include/malloc.h	/^    }ovu;$/;"	m	union:overhead	typeref:struct:overhead::__anon1
+ovu_bucket	include/malloc.h	/^       uint32_t ovu_bucket ;$/;"	m	struct:overhead::__anon1
 ovu_magic	include/malloc.h	/^       uint8_t  ovu_magic;$/;"	m	struct:overhead::__anon1
-ovu_size	include/malloc.h	/^       uint32_t ovu_size ;$/;"	m	struct:overhead::__anon1
 p	include/x86.h	/^	uint32_t p : 1;           \/\/ Present$/;"	m	struct:GateDesc
 p	include/x86.h	/^	uint32_t p : 1;          \/\/ Present$/;"	m	struct:SegDesc
 pa_to_va	include/vm.h	8;"	d
 paddr	boot/boot.h	/^	unsigned int paddr;$/;"	m	struct:ProgramHeader
 page_init	src/lib/malloc.c	/^page_init(void){$/;"	f
-page_inited	src/lib/malloc.c	/^boolean page_inited = FALSE;$/;"	v
+page_inited	src/lib/malloc.c	/^static boolean page_inited = FALSE;$/;"	v	file:
 panic	src/lib/abort.c	/^panic(const char *str) {$/;"	f
 phentsize	boot/boot.h	/^	unsigned short phentsize;$/;"	m	struct:ELFHeader
 phnum	boot/boot.h	/^	unsigned short phnum;$/;"	m	struct:ELFHeader
@@ -1247,9 +1248,9 @@ start32	boot/start.S	/^start32:$/;"	l
 static	kernel.asm	/^static inline uint32_t$/;"	l
 static	kernel.asm	/^static inline uint8_t$/;"	l
 static	kernel.asm	/^static inline void$/;"	l
-step	src/lib/malloc.c	25;"	d	file:
+step	src/lib/malloc.c	26;"	d	file:
 sti	include/x86.h	/^sti(void) {$/;"	f
-sum_page_size	src/lib/malloc.c	22;"	d	file:
+sum_page_size	src/lib/malloc.c	23;"	d	file:
 tf	include/process.h	/^    TrapFrame *tf;$/;"	m	struct:PCB
 tolower	src/lib/string.c	/^tolower(int ch) {$/;"	f
 toupper	src/lib/string.c	/^toupper(int ch) {$/;"	f

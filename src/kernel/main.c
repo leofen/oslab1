@@ -4,18 +4,32 @@
 #include "irq.h"
 
 void
+A(void){
+    while(TRUE){
+        printk("A");
+        wait_intr();
+    }
+}
+
+void
+B(void){
+    while(TRUE){
+        printk("B");
+        wait_intr();
+    }
+}
+
+void
 os_init(void) {
 	init_seg();
 	init_debug();
 	init_idt();
 	init_i8259();
+    queue_init();
 	printk("The OS is now working!\n");
-    int *a = (int *)malloc(10*sizeof(int));
-    int *b = (int *)malloc(10*sizeof(int));
-    int *c = (int *)malloc(10*sizeof(int));
-    printk("%x %x %x\n",a,b,c);
-    while((c = (int *)malloc(sizeof(int))) != NULL)
-        printk("%x\n",c);
+    wakeup(create_kthread(A));
+    wakeup(create_kthread(B));
+    printk("interupt open\n");
 	sti();
 	while (TRUE) {
 		wait_intr();

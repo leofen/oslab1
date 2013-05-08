@@ -6,7 +6,7 @@
 #include "adt/list.h"
 #include "process.h"
 
-PCB *creat_kthread(void *entry);
+PCB *create_kthread(void *entry);
 void sleep(void);
 void wakeup(PCB *pcb_to_wake);
 void lock(void);

@@ -38,9 +38,8 @@ trap:
 
 	pushl %esp
 	call irq_handle
-#    movl (current_pcb), %eax
-#    movl (%eax), %esp
-    addl $4, %esp
+    movl (current_pcb), %eax
+    movl (%eax), %esp
 	popal
 	popl %gs
 	popl %fs
