@@ -11,6 +11,7 @@
 #include "adt/list.h"
 #include "thread.h"
 #include "malloc.h"
+#include "sync.h"
 
 void panic(const char *text);
 
