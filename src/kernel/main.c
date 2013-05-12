@@ -3,45 +3,78 @@
 #include "vm.h"
 #include "irq.h"
 
+#define NBUF 5
+int buf[NBUF], f = 0, r = 0, g = 1, tid = 1;
+Semaphore empty, full, mutex;
+
+
 void
-A(void){
-    while(TRUE){
-        printk("A");
-        wait_intr();
+test_producer(void) {
+    while (TRUE) {
+        P(&empty);
+        P(&mutex);
+        buf[f ++] = g ++;
+        f %= NBUF;
+        V(&mutex);
+        V(&full);
     }
 }
 
 void
-B(void){
-    while(TRUE){
-        printk("B");
-        wait_intr();
+test_consumer(void) {
+    int id = tid ++;
+    while (TRUE) {
+        P(&full);
+        P(&mutex);
+        printk("#%d Got: %d\n", id, buf[r ++]);
+        r %= NBUF;
+        V(&mutex);
+        V(&empty);
     }
 }
+
+void
+test_setup(void) {
+    new_sem(&full, 0);
+    new_sem(&empty, NBUF);
+    new_sem(&mutex, 1);
+    wakeup(create_kthread(test_producer));
+    wakeup(create_kthread(test_producer));
+    wakeup(create_kthread(test_producer));
+    wakeup(create_kthread(test_consumer));
+    wakeup(create_kthread(test_consumer));
+    wakeup(create_kthread(test_consumer));
+    wakeup(create_kthread(test_consumer));
+}
+
 
 void
 os_init(void) {
-	init_seg();
-	init_debug();
-	init_idt();
-	init_i8259();
+    init_seg();
+    init_debug();
+    init_idt();
+    init_i8259();
     queue_init();
-	printk("The OS is now working!\n");
-    wakeup(create_kthread(A));
-    wakeup(create_kthread(B));
-    printk("interupt open\n");
-	sti();
-	while (TRUE) {
-		wait_intr();
-	}
+    printk("The OS is now working!\n");
+    test_setup();
+    ListHead *ptr;
+    PCB *pcb;
+    list_foreach(ptr , &runq){
+        pcb = list_entry( ptr , PCB , semq);
+        printk("%d\n",pcb->pid);
+    }
+    sti();
+    while (TRUE) {
+        wait_intr();
+    }
 }
 
 void
 entry(void) {
-	init_kvm();
-	void(*volatile next)(void) = os_init;
-	asm volatile("addl %0, %%esp" : : ""(KOFFSET));
-	next();
-	panic("init code should never return");
+    init_kvm();
+    void(*volatile next)(void) = os_init;
+    asm volatile("addl %0, %%esp" : : ""(KOFFSET));
+    next();
+    panic("init code should never return");
 }
 

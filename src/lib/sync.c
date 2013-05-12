@@ -43,7 +43,7 @@ P(Semaphore *sem){
     lock();
     sem->count--;
     if(sem->count < 0){
-        list_add_before(&sem->queue , &current_pcb->semq);
+        list_add_before(&sem->queue , &current_pcb->block);
         sleep();
     }
     unlock();
@@ -55,7 +55,7 @@ V(Semaphore *sem){
     sem->count++;
     if(sem->count <= 0){
         assert(!list_empty(&sem->queue));
-        PCB *pcb = list_entry(sem->queue.next , PCB , semq);
+        PCB *pcb = list_entry(sem->queue.next , PCB , block);
         list_del(sem->queue.next);
         wakeup(pcb);
     }

@@ -28,9 +28,9 @@ queue_init(void){
 void
 schedule(void){
     assert(!list_empty(&runq));
-    ListHead *current_list = &current_pcb->semq;
-    list_del(current_list);
-    list_add_before(&runq , current_list);//place current run task to the end of runqueue
+    ListHead *tail = runq.prev;
+    list_del(tail);
+    list_add_after(&runq , tail);//place tail task to the begin of runqueue
 }
 
 PCB *

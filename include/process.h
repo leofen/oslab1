@@ -9,8 +9,8 @@
 
 typedef struct PCB {
     TrapFrame *tf;
-    ListHead semq;
-    int32_t lock_count;
+    ListHead semq , block;
+    int32_t lock_count,pid;
     uint8_t kstack[KSTACK_SIZE];
 }PCB;
 

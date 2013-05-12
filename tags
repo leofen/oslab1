@@ -31,6 +31,7 @@ ListHead	include/adt/list.h	/^typedef struct ListHead ListHead;$/;"	t	typeref:st
 MAGIC	include/malloc.h	8;"	d
 MAXBUCKET	include/malloc.h	9;"	d
 MEM_MAX	include/vm.h	5;"	d
+NBUF	src/kernel/main.c	6;"	d	file:
 NR_IRQ	include/x86.h	56;"	d
 NR_PDE	include/x86.h	28;"	d
 NR_PTE	include/x86.h	29;"	d
@@ -38,6 +39,7 @@ NR_SEG	include/x86.h	44;"	d
 NULL	include/const.h	7;"	d
 OBJS	Makefile	/^OBJS    = $(CFILES:.c=.o) $(SFILES:.S=.o)$/;"	m
 OFF	include/x86.h	73;"	d
+P	src/lib/sync.c	/^P(Semaphore *sem){$/;"	f
 PCB	include/process.h	/^typedef struct PCB {$/;"	s
 PCB	include/process.h	/^}PCB;$/;"	t	typeref:struct:PCB
 PDE	include/x86.h	/^typedef uint32_t PDE;$/;"	t
@@ -91,6 +93,8 @@ STS_TG32	include/x86.h	16;"	d
 SegDesc	include/x86.h	/^struct SegDesc {$/;"	s
 SegDesc	include/x86.h	/^typedef struct SegDesc SegDesc;$/;"	t	typeref:struct:SegDesc
 SegDesc	kernel.asm	/^SegDesc gdt[NR_SEG];                   \/\/ the new GDT$/;"	l
+Semaphore	include/sync.h	/^typedef struct Semaphore {$/;"	s
+Semaphore	include/sync.h	/^} Semaphore ;$/;"	t	typeref:struct:Semaphore
 TRUE	include/const.h	4;"	d
 TSS	include/x86.h	/^struct TSS {$/;"	s
 TSS	include/x86.h	/^typedef struct TSS TSS;$/;"	t	typeref:struct:TSS
@@ -98,6 +102,7 @@ TSS	kernel.asm	/^TSS tss;                               \/\/ one TSS for all rin
 TrapFrame	include/x86.h	/^struct TrapFrame {$/;"	s
 TrapFrame	include/x86.h	/^typedef struct TrapFrame TrapFrame;$/;"	t	typeref:struct:TrapFrame
 USEL	include/x86.h	53;"	d
+V	src/lib/sync.c	/^V(Semaphore *sem){$/;"	f
 VA_TO_PA	boot/main.c	15;"	d	file:
 __ASSERT_H__	include/assert.h	2;"	d
 __COMMON_H__	include/common.h	2;"	d
@@ -110,6 +115,7 @@ __MALLOC_H_	include/malloc.h	2;"	d
 __PROCESS_H_	include/process.h	2;"	d
 __STDARG_H_	include/stdarg.h	2;"	d
 __STRING_H__	include/string.h	2;"	d
+__SYNC_H_	include/sync.h	2;"	d
 __THREAD_H_	include/thread.h	2;"	d
 __TYPES_H__	include/types.h	2;"	d
 __VM_H__	include/vm.h	2;"	d
@@ -127,6 +133,7 @@ boolean	include/types.h	/^typedef unsigned char  boolean;$/;"	t
 bootmain	boot/main.c	/^bootmain(void) {$/;"	f
 buf	kernel.asm	/^	buf = utoa_buf(value, buf + 1, base);$/;"	d
 buf	kernel.asm	/^        buf = *format++;$/;"	d
+buf	src/kernel/main.c	/^int buf[NBUF], f = 0, r = 0, g = 1, tid = 1;$/;"	v
 buf_str	kernel.asm	/^                      buf_str = itoa(buf_int,10);put_string;break;$/;"	d
 buf_str	kernel.asm	/^                      buf_str = utoa(buf_unsigned_int,16);put_string;break;$/;"	d
 c0100000	kernel.asm	/^c0100000 <memcpy>:$/;"	l
@@ -1100,6 +1107,7 @@ c0100bf0	kernel.asm	/^c0100bf0:	83 c4 08             	add    $0x8,%esp$/;"	l
 c0100bf3	kernel.asm	/^c0100bf3:	cf                   	iret   $/;"	l
 char	kernel.asm	/^char *$/;"	l
 cli	include/x86.h	/^cli(void) {$/;"	f
+count	include/sync.h	/^    int32_t count;$/;"	m	struct:Semaphore
 create_kthread	src/process/thread.c	/^create_kthread(void *entry){$/;"	f
 cs	include/x86.h	/^	uint32_t cs : 16;         \/\/ Code segment selector$/;"	m	struct:GateDesc
 cs	include/x86.h	/^	uint32_t err, eip, cs, eflags; \/\/ Execution state before trap $/;"	m	struct:TrapFrame
@@ -1121,6 +1129,7 @@ eflags	include/x86.h	/^	uint32_t err, eip, cs, eflags; \/\/ Execution state befo
 ehsize	boot/boot.h	/^	unsigned short ehsize;$/;"	m	struct:ELFHeader
 eip	include/x86.h	/^	uint32_t err, eip, cs, eflags; \/\/ Execution state before trap $/;"	m	struct:TrapFrame
 elf	boot/boot.h	/^	unsigned char  elf[12];$/;"	m	struct:ELFHeader
+empty	src/kernel/main.c	/^Semaphore empty, full, mutex;$/;"	v
 entry	boot/boot.h	/^	unsigned int   entry;$/;"	m	struct:ELFHeader
 entry	src/kernel/main.c	/^entry(void) {$/;"	f
 err	include/x86.h	/^	uint32_t err, eip, cs, eflags; \/\/ Execution state before trap $/;"	m	struct:TrapFrame
@@ -1129,12 +1138,15 @@ esi	include/x86.h	/^	uint32_t edi, esi, ebp, esp_;$/;"	m	struct:TrapFrame
 esp	include/x86.h	/^	uint32_t esp, ss;              \/\/ Used only when returning to DPL=3$/;"	m	struct:TrapFrame
 esp0	include/x86.h	/^	uint32_t esp0;         \/\/ Ring 0 Stack pointer and segment selector$/;"	m	struct:TSS
 esp_	include/x86.h	/^	uint32_t edi, esi, ebp, esp_;$/;"	m	struct:TrapFrame
+f	src/kernel/main.c	/^int buf[NBUF], f = 0, r = 0, g = 1, tid = 1;$/;"	v
 filesz	boot/boot.h	/^	unsigned int filesz;$/;"	m	struct:ProgramHeader
 flags	boot/boot.h	/^	unsigned int   flags;$/;"	m	struct:ELFHeader
 flags	boot/boot.h	/^	unsigned int flags;$/;"	m	struct:ProgramHeader
 free	src/lib/malloc.c	/^free(void * fp){$/;"	f
 fs	include/x86.h	/^	uint32_t gs, fs, es, ds;       \/\/ Segment register$/;"	m	struct:TrapFrame
+full	src/kernel/main.c	/^Semaphore empty, full, mutex;$/;"	v
 g	include/x86.h	/^	uint32_t g : 1;          \/\/ Granularity: limit scaled by 4K when set$/;"	m	struct:SegDesc
+g	src/kernel/main.c	/^int buf[NBUF], f = 0, r = 0, g = 1, tid = 1;$/;"	v
 gdt	boot/start.S	/^gdt:$/;"	l
 gdt	src/kernel/vm/kvm.c	/^SegDesc gdt[NR_SEG];                   \/\/ the new GDT$/;"	v
 gdtdesc	boot/start.S	/^gdtdesc:                           # GDT描述符$/;"	l
@@ -1173,6 +1185,8 @@ list_empty	include/adt/list.h	/^list_empty(ListHead *list) {$/;"	f
 list_entry	include/adt/list.h	11;"	d
 list_foreach	include/adt/list.h	52;"	d
 list_init	include/adt/list.h	/^list_init(ListHead *list) {$/;"	f
+lock	src/lib/sync.c	/^lock(void){$/;"	f
+lock_count	include/process.h	/^    int32_t lock_count;$/;"	m	struct:PCB
 machine	boot/boot.h	/^	unsigned short machine;$/;"	m	struct:ELFHeader
 magic	boot/boot.h	/^	unsigned int   magic;$/;"	m	struct:ELFHeader
 malloc	src/lib/malloc.c	/^malloc(uint32_t nbyte){$/;"	f
@@ -1180,7 +1194,9 @@ memcpy	src/lib/string.c	/^memcpy(void *dst, const void *src, size_t count) {$/;"
 memset	src/lib/string.c	/^memset(void *dst, int val, size_t count) {$/;"	f
 memsz	boot/boot.h	/^	unsigned int memsz;$/;"	m	struct:ProgramHeader
 min_page	src/lib/malloc.c	24;"	d	file:
+mutex	src/kernel/main.c	/^Semaphore empty, full, mutex;$/;"	v
 negative	kernel.asm	/^		negative = TRUE;$/;"	d
+new_sem	src/lib/sync.c	/^new_sem(Semaphore *sem , int value){$/;"	f
 next	include/adt/list.h	/^	struct ListHead *prev, *next;$/;"	m	struct:ListHead	typeref:struct:ListHead::
 next_process	src/process/schedule.c	/^next_process(void){$/;"	f
 nextf	src/lib/malloc.c	/^static overhead * nextf[MAXBUCKET];$/;"	v	file:
@@ -1217,7 +1233,9 @@ prev	include/adt/list.h	/^	struct ListHead *prev, *next;$/;"	m	struct:ListHead	t
 printk	src/lib/debug.c	/^printk(const char *fmt, ...) {$/;"	f
 put_onechar	src/lib/vfprintf.c	12;"	d	file:
 put_string	src/lib/vfprintf.c	14;"	d	file:
+queue	include/sync.h	/^    ListHead queue;$/;"	m	struct:Semaphore
 queue_init	src/process/schedule.c	/^queue_init(void){$/;"	f
+r	src/kernel/main.c	/^int buf[NBUF], f = 0, r = 0, g = 1, tid = 1;$/;"	v
 readf	include/x86.h	/^readf(void) {$/;"	f
 readsect	boot/main.c	/^readsect(void *dst, int offset) {$/;"	f
 readseg	boot/main.c	/^readseg(unsigned char *pa, int count, int offset) {$/;"	f
@@ -1240,6 +1258,7 @@ shnum	boot/boot.h	/^	unsigned short shnum;$/;"	m	struct:ELFHeader
 shoff	boot/boot.h	/^	unsigned int   shoff;$/;"	m	struct:ELFHeader
 shstrndx	boot/boot.h	/^	unsigned short shstrndx;$/;"	m	struct:ELFHeader
 size_t	include/types.h	/^typedef uint32_t size_t;$/;"	t
+sleep	src/process/thread.c	/^sleep(void){$/;"	f
 src	kernel.asm	/^		src = (char *)src + 1;$/;"	d
 ss	include/x86.h	/^	uint32_t esp, ss;              \/\/ Used only when returning to DPL=3$/;"	m	struct:TrapFrame
 ss0	include/x86.h	/^	uint32_t ss0;$/;"	m	struct:TSS
@@ -1251,7 +1270,11 @@ static	kernel.asm	/^static inline void$/;"	l
 step	src/lib/malloc.c	26;"	d	file:
 sti	include/x86.h	/^sti(void) {$/;"	f
 sum_page_size	src/lib/malloc.c	23;"	d	file:
+test_consumer	src/kernel/main.c	/^test_consumer(void) {$/;"	f
+test_producer	src/kernel/main.c	/^test_producer(void) {$/;"	f
+test_setup	src/kernel/main.c	/^test_setup(void) {$/;"	f
 tf	include/process.h	/^    TrapFrame *tf;$/;"	m	struct:PCB
+tid	src/kernel/main.c	/^int buf[NBUF], f = 0, r = 0, g = 1, tid = 1;$/;"	v
 tolower	src/lib/string.c	/^tolower(int ch) {$/;"	f
 toupper	src/lib/string.c	/^toupper(int ch) {$/;"	f
 trap	src/kernel/irq/do_irq.S	/^trap:$/;"	l
@@ -1264,6 +1287,7 @@ typedef	kernel.asm	/^typedef struct TrapFrame TrapFrame;$/;"	t
 uint16_t	include/types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint32_t	include/types.h	/^typedef unsigned int   uint32_t;$/;"	t
 uint8_t	include/types.h	/^typedef unsigned char  uint8_t;$/;"	t
+unlock	src/lib/sync.c	/^unlock(void){$/;"	f
 utoa	src/lib/string.c	/^utoa(unsigned int value, int base) {$/;"	f
 utoa_buf	src/lib/string.c	/^utoa_buf(unsigned int value, char *buf, int base) {$/;"	f
 va_args	include/stdarg.h	7;"	d
@@ -1278,3 +1302,4 @@ void	kernel.asm	/^void irq_handle(TrapFrame *tf) {$/;"	l
 void	kernel.asm	/^void$/;"	l
 wait_intr	include/x86.h	/^wait_intr() {$/;"	f
 waitdisk	boot/main.c	/^waitdisk(void) {$/;"	f
+wakeup	src/process/thread.c	/^wakeup(PCB *pcb_to_wake){$/;"	f

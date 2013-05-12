@@ -18,11 +18,14 @@
 
 #include "kernel.h"
 
+int pid = 0;
+
 PCB *
 create_kthread(void *entry){
     PCB *kt = (PCB *)malloc(sizeof(PCB));
     assert(kt != NULL);
     kt->lock_count = 0;
+    kt->pid = pid++;
     TrapFrame *tf = ((TrapFrame *)(kt->kstack + KSTACK_SIZE) - 1);
     kt->tf = tf;
     tf->edi = tf->esi = tf->ebp = tf->ebx = tf->edx = tf->ecx = tf->eax = 0;
