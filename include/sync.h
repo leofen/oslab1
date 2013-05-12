@@ -14,6 +14,9 @@ void new_sem (Semaphore * sem , int value);
 void P(Semaphore * sem);
 void V(Semaphore * sem);
 
+#define INTR assert(readf() & FL_IF)
+#define UNINTR assert( (~readf()) & FL_IF)
+
 void lock(void);
 void unlock(void);
 

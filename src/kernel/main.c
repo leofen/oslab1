@@ -11,12 +11,12 @@ Semaphore empty, full, mutex;
 void
 test_producer(void) {
     while (TRUE) {
-        P(&empty);
-        P(&mutex);
-        buf[f ++] = g ++;
-        f %= NBUF;
-        V(&mutex);
-        V(&full);
+        P(&empty);INTR;
+        P(&mutex);INTR;
+        buf[f ++] = g ++;INTR;
+        f %= NBUF;INTR;
+        V(&mutex);INTR;
+        V(&full);INTR;
     }
 }
 
@@ -24,12 +24,12 @@ void
 test_consumer(void) {
     int id = tid ++;
     while (TRUE) {
-        P(&full);
-        P(&mutex);
-        printk("#%d Got: %d\n", id, buf[r ++]);
-        r %= NBUF;
-        V(&mutex);
-        V(&empty);
+        P(&full);INTR;
+        P(&mutex);INTR;
+        printk("#%d Got: %d\n", id, buf[r ++]);INTR;
+        r %= NBUF;INTR;
+        V(&mutex);INTR;
+        V(&empty);INTR;
     }
 }
 
@@ -57,12 +57,6 @@ os_init(void) {
     queue_init();
     printk("The OS is now working!\n");
     test_setup();
-    ListHead *ptr;
-    PCB *pcb;
-    list_foreach(ptr , &runq){
-        pcb = list_entry( ptr , PCB , semq);
-        printk("%d\n",pcb->pid);
-    }
     sti();
     while (TRUE) {
         wait_intr();

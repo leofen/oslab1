@@ -20,15 +20,24 @@
 
 void
 lock(void){
-   cli();
-   current_pcb->lock_count++;
+    assert(current_pcb->lock_count >= 0);
+    current_pcb->lock_count++;
+    if (current_pcb->lock_count == 1){//first lock store eflags
+        if (readf() & FL_IF){
+            current_pcb->interrupt_flag = TRUE;
+            cli();
+        } else {
+            current_pcb->interrupt_flag = FALSE;
+        }
+    } else
+        UNINTR;
 }
 
 void
 unlock(void){
     assert(current_pcb->lock_count > 0);
     current_pcb->lock_count--;
-    if (current_pcb->lock_count == 0)
+    if ((current_pcb->lock_count == 0) && current_pcb->interrupt_flag == TRUE)
         sti();
 }
 
