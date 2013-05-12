@@ -12,6 +12,7 @@
 #include "thread.h"
 #include "malloc.h"
 #include "sync.h"
+#include "message.h"
 
 void panic(const char *text);
 
