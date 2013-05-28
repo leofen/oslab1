@@ -19,13 +19,10 @@ typedef struct Message_Node {
     ListHead sys_queue,pid_queue;
 }Message_Node;
 
-extern ListHead sys_message_list;
-
-void message_init(void);
 void send(pid_t dst , Message *m);
 void receive(pid_t dst , Message *m);
 boolean wait_message(pid_t pid);
-boolean have_message(pid_t pid);
+ListHead * get_message_list(pid_t pid);
 struct PCB * get_pcb(pid_t pid);
 
 #endif

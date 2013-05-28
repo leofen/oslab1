@@ -52,7 +52,7 @@ void
 A(void){
     Message m;
     while(1){
-        receive(2,&m);
+        receive(ANY,&m);
         printk("A\n");
         send(2,&m);
     }
@@ -63,7 +63,7 @@ B(void){
     Message m;
     send(1,&m);
     while(1){
-        receive(1,&m);
+        receive(ANY,&m);
         printk("B\n");
         send(1,&m);
     }
@@ -78,7 +78,7 @@ os_init(void) {
     queue_init();
     hashtb_init();
     printk("The OS is now working!\n");
-    //test_setup();
+   // test_setup();
     wakeup(create_kthread(A));
     wakeup(create_kthread(B));
     sti();

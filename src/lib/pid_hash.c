@@ -18,6 +18,7 @@
 
 #include "pid_hash.h"
 
+hlist_head hashtb_msg[HASH_NUMBER][HASH_NUMBER];
 
 static inline int hash_func (int key){
     int a, b, p, m;
@@ -29,9 +30,12 @@ static inline int hash_func (int key){
 }
 
 void hashtb_init(void){
-    int i;
+    int i,j;
     for ( i = 0 ; i < HASH_NUMBER ; i ++ )
         INIT_HLIST_HEAD(&hashtb[i]);
+    for ( i = 0 ; i < HASH_NUMBER ; i ++ )
+        for ( j = 0 ; j < HASH_NUMBER ; j ++ )
+            INIT_HLIST_HEAD(&hashtb_msg[i][j]);
 }
 
 Process_Info * add_hash_element(int key){
@@ -54,4 +58,19 @@ Process_Info * get_value(int key){
     return (Process_Info *)NULL;
 }
 
-
+ListHead * get_msg_list(int src , int dst){
+    Msg_Status *p;
+    hlist_node *np;
+    hlist_for_each_entry(p , np , &hashtb_msg[hash_func(src)][hash_func(dst)] , hash){
+        if (p->src == src && p->dst == dst)
+            return &p->message_list;
+    }
+    //don't find , add element
+    Msg_Status *mp = (Msg_Status *) malloc(sizeof(Msg_Status));
+    assert(mp != NULL);
+    mp->src = src;
+    mp->dst = dst;
+    list_init(&mp->message_list);
+    hlist_add_head(&mp->hash , &hashtb_msg[hash_func(src)][hash_func(dst)]);
+    return &mp->message_list;
+}
