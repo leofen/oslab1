@@ -14,6 +14,7 @@
 #include "sync.h"
 #include "message.h"
 #include "pid_hash.h"
+#include "string.h"
 
 void panic(const char *text);
 

@@ -26,4 +26,6 @@ void vec14();
 void vecsys();
 void irqall();
 
+void add_irq_handle(int irq , void (*handle) (void));
+
 #endif

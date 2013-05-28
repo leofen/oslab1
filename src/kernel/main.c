@@ -49,14 +49,38 @@ test_setup(void) {
 
 
 void
+A(void){
+    Message m;
+    while(1){
+        receive(2,&m);
+        printk("A\n");
+        send(2,&m);
+    }
+}
+
+void
+B(void){
+    Message m;
+    send(1,&m);
+    while(1){
+        receive(1,&m);
+        printk("B\n");
+        send(1,&m);
+    }
+}
+
+void
 os_init(void) {
     init_seg();
     init_debug();
     init_idt();
     init_i8259();
     queue_init();
+    hashtb_init();
     printk("The OS is now working!\n");
-    test_setup();
+    //test_setup();
+    wakeup(create_kthread(A));
+    wakeup(create_kthread(B));
     sti();
     while (TRUE) {
         wait_intr();

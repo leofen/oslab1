@@ -18,7 +18,7 @@
 
 #include "kernel.h"
 
-int pid = 0;
+int pid = 1;
 
 hlist_head hashtb[HASH_NUMBER];
 
@@ -35,12 +35,12 @@ create_kthread(void *entry){
     tf->ds = tf->es = KSEL(SEG_KDATA);
     tf->eip = (uint32_t) entry;
     tf->cs = KSEL(SEG_KCODE);
-    tf->eflags = FL_TF | FL_IF;
-    new_sema(&kt->message , 0);
+    tf->eflags = 0 | FL_IF;
+    new_sem(&kt->message , 0);
     kt->message_addr = NULL;
-    Process_Info *pi = add_hash_element(pid);
+    Process_Info *pi = add_hash_element(kt->pid);
     pi->pcb = kt;
-    pi->wait_for_pid = -1;
+    pi->wait_for_pid = 0;
     list_init(&pi->message_list); 
     return kt;
 }
