@@ -4,6 +4,8 @@
 #include "x86.h"
 #include "common.h"
 #include "adt/list.h"
+#include "sync.h"
+#include "message.h"
 
 #define KSTACK_SIZE 8000
 
@@ -12,6 +14,8 @@ typedef struct PCB {
     ListHead semq , block;
     int32_t lock_count,pid;
     boolean interrupt_flag;
+    Semaphore message;
+    Message * message_addr;
     uint8_t kstack[KSTACK_SIZE];
 }PCB;
 
