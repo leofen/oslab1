@@ -1,4 +1,4 @@
-CC      = clang
+CC      = gcc
 LD      = ld
 CFLAGS  = -m32 -static -ggdb -MD -Wall -Werror -I./include -O2 \
 		 -fno-builtin -fno-stack-protector -fno-omit-frame-pointer

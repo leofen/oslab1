@@ -8,7 +8,7 @@ ANY	include/message.h	6;"	d
 ASFLAGS	Makefile	/^ASFLAGS = -m32 -MD -I.\/include$/;"	m
 CBUF_SZ	include/driver/term.h	34;"	d
 CBUF_SZ	include/driver/tty.h	11;"	d
-CC	Makefile	/^CC      = gcc$/;"	m
+CC	Makefile	/^CC      = clang$/;"	m
 CFILES	Makefile	/^CFILES  = $(shell find src\/ -name "*.c")$/;"	m
 CFLAGS	Makefile	/^CFLAGS  = -m32 -static -ggdb -MD -Wall -Werror -I.\/include -O2 \\$/;"	m
 CR0_PE	include/x86.h	23;"	d
@@ -47,11 +47,21 @@ GATE	include/x86.h	126;"	d
 GDT_ENTRY	boot/asm.h	2;"	d
 GateDesc	include/x86.h	/^struct GateDesc {$/;"	s
 GateDesc	include/x86.h	/^typedef struct GateDesc GateDesc;$/;"	t	typeref:struct:GateDesc
+HASH_NUMBER	hash_test.c	28;"	d	file:
+HASH_NUMBER	include/pid_hash.h	11;"	d
+HLIST_HEAD	hlist.h	10;"	d
+HLIST_HEAD	include/adt/list.h	68;"	d
+HLIST_HEAD_INIT	hlist.h	9;"	d
+HLIST_HEAD_INIT	include/adt/list.h	67;"	d
 HZ	include/driver/time.h	8;"	d
+INIT_HLIST_HEAD	hlist.h	11;"	d
+INIT_HLIST_HEAD	include/adt/list.h	69;"	d
+INIT_HLIST_NODE	hlist.h	/^static inline void INIT_HLIST_NODE(struct hlist_node *h)$/;"	f
+INIT_HLIST_NODE	include/adt/list.h	/^static inline void INIT_HLIST_NODE(struct hlist_node *h)$/;"	f
 INTR	include/sync.h	17;"	d
 KOFFSET	include/vm.h	4;"	d
 KSEL	include/x86.h	52;"	d
-KSTACK_SIZE	include/process.h	8;"	d
+KSTACK_SIZE	include/process.h	10;"	d
 K_ALT	include/driver/term.h	8;"	d
 K_BACK	include/driver/term.h	11;"	d
 K_CAPS	include/driver/term.h	4;"	d
@@ -130,6 +140,10 @@ PTE_U	include/x86.h	37;"	d
 PTE_W	include/x86.h	36;"	d
 PTX	include/x86.h	72;"	d
 PTXSHFT	include/x86.h	31;"	d
+P_Status	include/pid_hash.h	/^typedef struct P_Status{$/;"	s
+P_Status	include/pid_hash.h	/^}P_Status;$/;"	t	typeref:struct:P_Status
+Process_Info	include/pid_hash.h	/^typedef struct Process_Info{$/;"	s
+Process_info	include/pid_hash.h	/^}Process_info;$/;"	t	typeref:struct:Process_Info
 ProgramHeader	boot/boot.h	/^struct ProgramHeader {$/;"	s
 QEMU	Makefile	/^QEMU    = qemu-system-i386$/;"	m
 RSTK_SZ	include/driver/tty.h	12;"	d
@@ -180,6 +194,7 @@ __LIST_H__	include/adt/list.h	2;"	d
 __MALLOC_H_	include/malloc.h	2;"	d
 __MESSAGE_H_	include/message.h	2;"	d
 __MOD_HAL_H__	include/driver/hal.h	2;"	d
+__PID_HASH_H_	include/pid_hash.h	2;"	d
 __PROCESS_H_	include/process.h	2;"	d
 __STDARG_H_	include/stdarg.h	2;"	d
 __STRING_H__	include/string.h	2;"	d
@@ -191,6 +206,8 @@ __TTY_H__	include/driver/tty.h	2;"	d
 __TYPES_H__	include/types.h	2;"	d
 __VM_H__	include/vm.h	2;"	d
 __X86_H__	include/x86.h	2;"	d
+__hlist_del	hlist.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f
+__hlist_del	include/adt/list.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f
 __va_rounded_size	include/stdarg.h	4;"	d
 a	kernel.asm	/^       a:	74 04                	je     10 <memcpy-0xc00ffff0>$/;"	l
 a	kernel.asm	/^   a:	01 01                	add    %eax,(%ecx)$/;"	l
@@ -600,6 +617,8 @@ ad9	kernel.asm	/^ ad9:	0d 00 01 01 01       	or     $0x1010100,%eax$/;"	l
 ada	kernel.asm	/^     ada:	00 00                	add    %al,(%eax)$/;"	l
 adc	kernel.asm	/^     adc:	0f 0d 02             	prefetch (%edx)$/;"	l
 adc	kernel.asm	/^ adc:	03 0e                	add    (%esi),%ecx$/;"	l
+add_hash_element	hash_test.c	/^void add_hash_element(int key , int value){$/;"	f
+add_hash_element	include/pid_hash.h	/^static Process_Info * add_hash_element(int key){$/;"	f
 ade	kernel.asm	/^     ade:	00 cd                	add    %cl,%ch$/;"	l
 ade	kernel.asm	/^ ade:	01 00                	add    %eax,(%eax)$/;"	l
 ade	kernel.asm	/^ ade:	3a 0b                	cmp    (%ebx),%cl$/;"	l
@@ -4260,6 +4279,8 @@ consl_accept	src/drivers/tty/console.c	/^consl_accept(Console *c, char ch) {$/;"
 consl_feed	src/drivers/tty/console.c	/^consl_feed(Console *c, int key) {$/;"	f
 consl_sync	src/drivers/tty/console.c	/^consl_sync(Console *c) {$/;"	f
 consl_writec	src/drivers/tty/console.c	/^consl_writec(Console *c, char ch) {$/;"	f
+container_of	hlist.h	113;"	d
+container_of	include/adt/list.h	171;"	d
 cook	src/drivers/tty/console.c	/^cook(Console *c) {$/;"	f	file:
 count	include/driver/hal.h	/^	size_t count;$/;"	m	struct:DevMessage
 count	include/sync.h	/^    int32_t count;$/;"	m	struct:Semaphore
@@ -5394,6 +5415,8 @@ ffc	kernel.asm	/^     ffc:	02 00                	add    (%eax),%al$/;"	l
 ffe	kernel.asm	/^     ffe:	03 06                	add    (%esi),%eax$/;"	l
 ffe	kernel.asm	/^     ffe:	75 08                	jne    1008 <memcpy-0xc00feff8>$/;"	l
 filesz	boot/boot.h	/^	unsigned int filesz;$/;"	m	struct:ProgramHeader
+first	hlist.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_head::hlist_node
+first	include/adt/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_head::hlist_node
 flags	boot/boot.h	/^	unsigned int   flags;$/;"	m	struct:ELFHeader
 flags	boot/boot.h	/^	unsigned int flags;$/;"	m	struct:ProgramHeader
 free	src/drivers/hal.c	/^static ListHead free, devices;$/;"	v	file:
@@ -5409,12 +5432,59 @@ get_bucket	src/lib/malloc.c	/^get_bucket(uint32_t x){$/;"	f
 get_cooked	src/drivers/tty/console.c	/^get_cooked(Console *c, char *buf, int count) {$/;"	f
 get_cr0	include/x86.h	/^get_cr0(void) {$/;"	f
 get_time	src/drivers/time/timer.c	/^void get_time(Time *tm) {$/;"	f
+get_value	hash_test.c	/^int get_value(int key){$/;"	f
 gs	include/x86.h	/^	uint32_t gs, fs, es, ds;       \/\/ Segment register$/;"	m	struct:TrapFrame
 h	include/driver/tty.h	/^	int w, h, wh;$/;"	m	struct:Console
 hal_get	src/drivers/hal.c	/^Device *hal_get(const char *name) {$/;"	f
 hal_list	src/drivers/hal.c	/^void hal_list(void) {$/;"	f
 hal_register	src/drivers/hal.c	/^void hal_register(const char *name, pid_t pid, int dev_id) {$/;"	f
+hash	hash_test.c	/^    hlist_node hash;$/;"	m	struct:p_status	file:
+hash	include/pid_hash.h	/^    hlist_node hash;$/;"	m	struct:P_Status
+hash_func	hash_test.c	/^static inline int hash_func (int key){$/;"	f	file:
+hash_func	include/pid_hash.h	/^static inline int hash_func (int key){$/;"	f
+hashtb	hash_test.c	/^hlist_head hashtb[HASH_NUMBER];$/;"	v
+hashtb_free	hash_test.c	/^void hashtb_free(void){$/;"	f
+hashtb_init	hash_test.c	/^void hashtb_init(void){$/;"	f
+hashtb_init	include/pid_hash.h	/^static void hashtb_init(void){$/;"	f
 header	include/driver/hal.h	/^	Message header; \/\/ header与Message的头部定义保持一致即可(src, dst, type)$/;"	m	struct:DevMessage
+hlist_add_after	hlist.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f
+hlist_add_after	include/adt/list.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f
+hlist_add_before	hlist.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f
+hlist_add_before	include/adt/list.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f
+hlist_add_head	hlist.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f
+hlist_add_head	include/adt/list.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f
+hlist_del	hlist.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f
+hlist_del	include/adt/list.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f
+hlist_del_init	hlist.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f
+hlist_del_init	include/adt/list.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f
+hlist_empty	hlist.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f
+hlist_empty	include/adt/list.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f
+hlist_entry	hlist.h	96;"	d
+hlist_entry	include/adt/list.h	154;"	d
+hlist_for_each	hlist.h	98;"	d
+hlist_for_each	include/adt/list.h	156;"	d
+hlist_for_each_entry	hlist.h	122;"	d
+hlist_for_each_entry	include/adt/list.h	180;"	d
+hlist_for_each_entry_continue	hlist.h	134;"	d
+hlist_for_each_entry_continue	include/adt/list.h	192;"	d
+hlist_for_each_entry_from	hlist.h	146;"	d
+hlist_for_each_entry_from	include/adt/list.h	204;"	d
+hlist_for_each_entry_safe	hlist.h	159;"	d
+hlist_for_each_entry_safe	include/adt/list.h	217;"	d
+hlist_for_each_safe	hlist.h	102;"	d
+hlist_for_each_safe	include/adt/list.h	160;"	d
+hlist_head	hlist.h	/^typedef struct hlist_head {$/;"	s
+hlist_head	hlist.h	/^}hlist_head;$/;"	t	typeref:struct:hlist_head
+hlist_head	include/adt/list.h	/^typedef struct hlist_head {$/;"	s
+hlist_head	include/adt/list.h	/^}hlist_head;$/;"	t	typeref:struct:hlist_head
+hlist_move_list	hlist.h	/^static inline void hlist_move_list(struct hlist_head *old,$/;"	f
+hlist_move_list	include/adt/list.h	/^static inline void hlist_move_list(struct hlist_head *old,$/;"	f
+hlist_node	hlist.h	/^typedef struct hlist_node {$/;"	s
+hlist_node	hlist.h	/^}hlist_node;$/;"	t	typeref:struct:hlist_node
+hlist_node	include/adt/list.h	/^typedef struct hlist_node {$/;"	s
+hlist_node	include/adt/list.h	/^}hlist_node;$/;"	t	typeref:struct:hlist_node
+hlist_unhashed	hlist.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f
+hlist_unhashed	include/adt/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f
 hour	include/driver/time.h	/^	int hour, minute, second;$/;"	m	struct:Time
 i	include/driver/tty.h	/^	int i, f, r;$/;"	m	struct:Console
 idt	src/kernel/irq/idt.c	/^struct GateDesc idt[NR_IRQ];$/;"	v	typeref:struct:GateDesc
@@ -5443,6 +5513,8 @@ itoa	src/lib/string.c	/^itoa(int value, int base) {$/;"	f
 itoa_buf	src/lib/string.c	/^itoa_buf(int value, char *buf, int base) {$/;"	f
 jiffy	src/drivers/time/timer.c	/^long jiffy = 0;$/;"	v
 kernel	kernel.asm	/^kernel:     file format elf32-i386$/;"	l
+key	hash_test.c	/^    int key;$/;"	m	struct:p_status	file:
+key	include/pid_hash.h	/^    int key;\/\/pid$/;"	m	struct:P_Status
 keychar	src/drivers/tty/keyboard.c	/^int keychar[2][128] = {$/;"	v
 kstack	include/process.h	/^    uint8_t kstack[KSTACK_SIZE];$/;"	m	struct:PCB
 lbuf	include/driver/tty.h	/^	char lbuf[LBUF_SZ + 1];$/;"	m	struct:Console
@@ -5463,11 +5535,15 @@ lock	src/lib/sync.c	/^lock(void){$/;"	f
 lock_count	include/process.h	/^    int32_t lock_count,pid;$/;"	m	struct:PCB
 machine	boot/boot.h	/^	unsigned short machine;$/;"	m	struct:ELFHeader
 magic	boot/boot.h	/^	unsigned int   magic;$/;"	m	struct:ELFHeader
+main	hash_test.c	/^main ( int argc, char *argv[] )$/;"	f
 malloc	src/lib/malloc.c	/^malloc(uint32_t nbyte){$/;"	f
 md	src/drivers/time/timer.c	/^static int md(int year, int month) {$/;"	f	file:
 memcpy	src/lib/string.c	/^memcpy(void *dst, const void *src, size_t count) {$/;"	f
 memset	src/lib/string.c	/^memset(void *dst, int val, size_t count) {$/;"	f
 memsz	boot/boot.h	/^	unsigned int memsz;$/;"	m	struct:ProgramHeader
+message	include/process.h	/^    Semaphore message;$/;"	m	struct:PCB
+message_addr	include/process.h	/^    Message * message_addr;$/;"	m	struct:PCB
+message_list	include/pid_hash.h	/^    ListHead message_list;\/\/the message this process has send but not be received$/;"	m	struct:Process_Info
 min_page	src/lib/malloc.c	24;"	d	file:
 minute	include/driver/time.h	/^	int hour, minute, second;$/;"	m	struct:Time
 month	include/driver/time.h	/^	int year, month, day;$/;"	m	struct:Time
@@ -5477,7 +5553,9 @@ mutex	src/kernel/main.c	/^Semaphore empty, full, mutex;$/;"	v
 name	include/driver/hal.h	/^	const char *name;$/;"	m	struct:Device
 name	include/driver/tty.h	/^	const char *name;$/;"	m	struct:Console
 new_sem	src/lib/sync.c	/^new_sem(Semaphore *sem , int value){$/;"	f
+next	hlist.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::hlist_node
 next	include/adt/list.h	/^	struct ListHead *prev, *next;$/;"	m	struct:ListHead	typeref:struct:ListHead::
+next	include/adt/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::hlist_node
 next	src/drivers/tty/console.c	/^next(Console *c) {$/;"	f	file:
 next_process	src/process/schedule.c	/^next_process(void){$/;"	f
 nextf	src/lib/malloc.c	/^static overhead * nextf[MAXBUCKET];$/;"	v	file:
@@ -5502,12 +5580,15 @@ ovu_bucket	include/malloc.h	/^       uint32_t ovu_bucket ;$/;"	m	struct:overhead
 ovu_magic	include/malloc.h	/^       uint8_t  ovu_magic;$/;"	m	struct:overhead::__anon1
 p	include/x86.h	/^	uint32_t p : 1;           \/\/ Present$/;"	m	struct:GateDesc
 p	include/x86.h	/^	uint32_t p : 1;          \/\/ Present$/;"	m	struct:SegDesc
+p_status	hash_test.c	/^typedef struct p_status{$/;"	s	file:
+p_status	hash_test.c	/^}p_status;$/;"	t	typeref:struct:p_status	file:
 pa_to_va	include/vm.h	8;"	d
 paddr	boot/boot.h	/^	unsigned int paddr;$/;"	m	struct:ProgramHeader
 page_init	src/lib/malloc.c	/^page_init(void){$/;"	f
 page_inited	src/lib/malloc.c	/^static boolean page_inited = FALSE;$/;"	v	file:
 panic	src/lib/abort.c	/^panic(const char *str) {$/;"	f
 payload	include/message.h	/^    char payload[MSG_SZ];$/;"	m	struct:Message
+pcb	include/pid_hash.h	/^    PCB *pcb;$/;"	m	struct:Process_Info
 phentsize	boot/boot.h	/^	unsigned short phentsize;$/;"	m	struct:ELFHeader
 phnum	boot/boot.h	/^	unsigned short phnum;$/;"	m	struct:ELFHeader
 phoff	boot/boot.h	/^	unsigned int   phoff;$/;"	m	struct:ELFHeader
@@ -5517,8 +5598,11 @@ pid	src/process/thread.c	/^int pid = 0;$/;"	v
 pid_t	include/types.h	/^typedef int32_t  pid_t;$/;"	t
 pool	src/lib/malloc.c	/^uint8_t pool[((sum_page_size << min_page) + MAXBUCKET * sizeof(overhead)) * num_page];$/;"	v
 pos	include/driver/tty.h	/^	int size, pos;$/;"	m	struct:Console
+pprev	hlist.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
+pprev	include/adt/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 prev	include/adt/list.h	/^	struct ListHead *prev, *next;$/;"	m	struct:ListHead	typeref:struct:ListHead::ListHead
 printk	src/lib/debug.c	/^printk(const char *fmt, ...) {$/;"	f
+process_info	include/pid_hash.h	/^    Process_Info process_info;$/;"	m	struct:P_Status
 put_onechar	src/lib/vfprintf.c	12;"	d	file:
 put_string	src/lib/vfprintf.c	14;"	d	file:
 putc	src/drivers/tty/console.c	/^putc(Console *c, char ch) {$/;"	f	file:
@@ -5532,6 +5616,7 @@ readf	include/x86.h	/^readf(void) {$/;"	f
 readkey	src/drivers/tty/keyboard.c	/^readkey(void) {$/;"	f
 readsect	boot/main.c	/^readsect(void *dst, int offset) {$/;"	f
 readseg	boot/main.c	/^readseg(unsigned char *pa, int count, int offset) {$/;"	f
+receive	src/lib/message.c	/^receive(pid_t dst , Message *m){$/;"	f
 removec	src/drivers/tty/console.c	/^removec(Console *c) {$/;"	f	file:
 rstk	include/driver/tty.h	/^	Message rstk[RSTK_SZ];$/;"	m	struct:Console
 rsv1	include/x86.h	/^	uint32_t rsv1 : 1;       \/\/ Reserved$/;"	m	struct:SegDesc
@@ -5546,6 +5631,7 @@ scr	include/driver/tty.h	/^	uint16_t *scr;$/;"	m	struct:Console
 scrup	src/drivers/tty/console.c	/^scrup(Console *c) {$/;"	f	file:
 second	include/driver/time.h	/^	int hour, minute, second;$/;"	m	struct:Time
 semq	include/process.h	/^    ListHead semq , block;$/;"	m	struct:PCB
+send	src/lib/message.c	/^send(pid_t dst , Message *m){$/;"	f
 send_keymsg	src/drivers/tty/keyboard.c	/^send_keymsg(void) {$/;"	f
 send_updatemsg	src/drivers/tty/console.c	/^send_updatemsg(void) {$/;"	f	file:
 serial_idle	src/lib/debug.c	/^serial_idle(void) {$/;"	f	file:
@@ -5602,12 +5688,14 @@ utoa_buf	src/lib/string.c	/^utoa_buf(unsigned int value, char *buf, int base) {$
 va_args	include/stdarg.h	7;"	d
 va_to_pa	include/vm.h	7;"	d
 vaddr	boot/boot.h	/^	unsigned int vaddr;$/;"	m	struct:ProgramHeader
+value	hash_test.c	/^    int value;$/;"	m	struct:p_status	file:
 vbuf	include/driver/tty.h	/^	uint16_t *vbuf;$/;"	m	struct:Console
 vbuf	src/drivers/tty/console.c	/^static uint16_t vbuf[NR_TTY][SCR_W * SCR_H * 2];$/;"	v	file:
 version	boot/boot.h	/^	unsigned int   version;$/;"	m	struct:ELFHeader
 vfprintf	src/lib/vfprintf.c	/^vfprintf(void (*putchar_func)(char), const char *format, void **data) {$/;"	f
 vmem	src/drivers/tty/console.c	/^static uint16_t *vmem = (void*)pa_to_va(0xb8000);$/;"	v	file:
 w	include/driver/tty.h	/^	int w, h, wh;$/;"	m	struct:Console
+wait_for_pid	include/pid_hash.h	/^    int wait_for_pid;\/\/wait for the message of the process which pid stand for , -1 means aren't wait$/;"	m	struct:Process_Info
 wait_intr	include/x86.h	/^wait_intr() {$/;"	f
 waitdisk	boot/main.c	/^waitdisk(void) {$/;"	f
 wakeup	src/process/thread.c	/^wakeup(PCB *pcb_to_wake){$/;"	f

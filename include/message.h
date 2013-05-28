@@ -2,6 +2,7 @@
 #define __MESSAGE_H_
 
 #include "types.h"
+#include "pid_hash.h"
 
 #define ANY -1
 #define MSG_SZ 80

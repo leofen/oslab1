@@ -15,7 +15,7 @@ typedef struct PCB {
     int32_t lock_count,pid;
     boolean interrupt_flag;
     Semaphore message;
-    Message * message_addr;
+    struct Message * message_addr;
     uint8_t kstack[KSTACK_SIZE];
 }PCB;
 

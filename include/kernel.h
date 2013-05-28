@@ -13,6 +13,7 @@
 #include "malloc.h"
 #include "sync.h"
 #include "message.h"
+#include "pid_hash.h"
 
 void panic(const char *text);
 

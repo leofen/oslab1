@@ -20,6 +20,8 @@
 
 int pid = 0;
 
+hlist_head hashtb[HASH_NUMBER];
+
 PCB *
 create_kthread(void *entry){
     PCB *kt = (PCB *)malloc(sizeof(PCB));
@@ -36,6 +38,10 @@ create_kthread(void *entry){
     tf->eflags = FL_TF | FL_IF;
     new_sema(&kt->message , 0);
     kt->message_addr = NULL;
+    Process_Info *pi = add_hash_element(pid);
+    pi->pcb = kt;
+    pi->wait_for_pid = -1;
+    list_init(&pi->message_list); 
     return kt;
 }
 
