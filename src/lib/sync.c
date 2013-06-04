@@ -20,6 +20,8 @@
 
 void
 lock(void){
+    if (current_pcb->lock_count < 0)
+        printk("wrong lock_count:%d pid:\n",current_pcb->lock_count,current_pcb->pid);
     assert(current_pcb->lock_count >= 0);
     current_pcb->lock_count++;
     if (current_pcb->lock_count == 1){//first lock store eflags
