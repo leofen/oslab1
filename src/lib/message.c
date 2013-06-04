@@ -17,8 +17,10 @@
  */
 #include "kernel.h"
 
-ListHead sys_message_list;
+#include "driver/hal.h"
 
+ListHead sys_message_list;
+boolean in_irq_handle = FALSE;
 
 void
 send(pid_t dst , Message *m){
@@ -29,15 +31,16 @@ send(pid_t dst , Message *m){
         pi->wait_for_pid = 0;
         PCB * receiver = pi->pcb;
         receiver->message_addr->dest = dst;
-        receiver->message_addr->src = current_pcb->pid;
+        receiver->message_addr->src = (in_irq_handle == TRUE)?MSG_HWINTR:current_pcb->pid;
         receiver->message_addr->type = m->type;
-        memcpy((void *)receiver->message_addr->payload , (void *)m->payload , MSG_SZ );
+        memcpy(receiver->message_addr->payload , m->payload , MSG_SZ );
+        //printk("2 in send %s addr %x \n",((DevMessage*)receiver->message_addr)->buf,((DevMessage*)receiver->message_addr)->buf);
         V(&receiver->message);
     } else {
         Message_Node *new_message = (Message_Node *)malloc(sizeof(Message_Node));
         assert(new_message != NULL);
         new_message->message.dest = dst;
-        new_message->message.src = current_pcb->pid;
+        new_message->message.src = (in_irq_handle == TRUE)?MSG_HWINTR:current_pcb->pid;
         new_message->message.type = m->type;
         memcpy(new_message->message.payload , m->payload , MSG_SZ);
         list_add_after(get_msg_list(current_pcb->pid , dst) , &new_message->sys_queue);

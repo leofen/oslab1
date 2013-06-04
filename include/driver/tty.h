@@ -37,5 +37,6 @@ void consl_accept(Console *c, char ch);
 void readkey(void);
 void update_banner(void);
 void read_request(DevMessage *m);
-
+void init_tty(void);
+void ttyd(void);
 #endif

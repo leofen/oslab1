@@ -1,6 +1,8 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
+#include "types.h"
+
 void init_idt(void);
 void init_i8259(void);
 
@@ -27,5 +29,9 @@ void vecsys();
 void irqall();
 
 void add_irq_handle(int irq , void (*handle) (void));
+
+typedef void (*Func_Pointer) (void);
+extern Func_Pointer irq_array[2][10];
+extern boolean need_sched;
 
 #endif

@@ -2,71 +2,55 @@
 #include "x86.h"
 #include "vm.h"
 #include "irq.h"
-
-#define NBUF 5
-int buf[NBUF], f = 0, r = 0, g = 1, tid = 1;
-Semaphore empty, full, mutex;
-
-
-void
-test_producer(void) {
-    while (TRUE) {
-        P(&empty);INTR;
-        P(&mutex);INTR;
-        buf[f ++] = g ++;INTR;
-        f %= NBUF;INTR;
-        V(&mutex);INTR;
-        V(&full);INTR;
-    }
-}
+#include "driver/hal.h"
+#include "driver/term.h"
+#include "driver/time.h"
+#include "driver/tty.h"
 
 void
-test_consumer(void) {
-    int id = tid ++;
-    while (TRUE) {
-        P(&full);INTR;
-        P(&mutex);INTR;
-        printk("#%d Got: %d\n", id, buf[r ++]);INTR;
-        r %= NBUF;INTR;
-        V(&mutex);INTR;
-        V(&empty);INTR;
-    }
-}
-
-void
-test_setup(void) {
-    new_sem(&full, 0);
-    new_sem(&empty, NBUF);
-    new_sem(&mutex, 1);
-    wakeup(create_kthread(test_producer));
-    wakeup(create_kthread(test_producer));
-    wakeup(create_kthread(test_producer));
-    wakeup(create_kthread(test_consumer));
-    wakeup(create_kthread(test_consumer));
-    wakeup(create_kthread(test_consumer));
-    wakeup(create_kthread(test_consumer));
-}
-
-
-void
-A(void){
-    Message m;
+idle(){
     while(1){
-        receive(ANY,&m);
-        printk("A\n");
-        send(2,&m);
+        wait_intr();
     }
 }
 
 void
-B(void){
-    Message m;
-    send(1,&m);
-    while(1){
-        receive(ANY,&m);
-        printk("B\n");
-        send(1,&m);
-    }
+echo() {
+	static int tty = 1;
+	char name[] = "tty*", buf[256];
+    printk("init buf_addr %x\n",buf);
+	Device *dev;
+	lock();
+	name[3] = '0' + (tty ++);
+	unlock();
+	while (1) {
+		dev = hal_get(name);
+		if (dev != NULL) {
+			dev_write(dev, 0, name, 4);
+			dev_write(dev, 0, "# ", 2);
+			int i, nread = dev_read(dev, 0, buf, 255);
+			buf[nread] = 0;
+			for (i = 0; i < nread; i ++) {
+				if (buf[i] >= 'a' && buf[i] <= 'z') {
+					buf[i] += 'A' - 'a';
+				}
+			}
+            printk("buf:%s\n",buf);
+			dev_write(dev, 0, "Got: ", 5);
+			dev_write(dev, 0, buf, nread);
+			dev_write(dev, 0, "\n", 1);
+		} else {
+			printk("%s\n", name);
+		}
+	}
+}
+
+void
+test() {
+	int i;
+	for (i = 0; i < NR_TTY; i ++) {
+		wakeup(create_kthread(echo));
+	}
 }
 
 void
@@ -78,9 +62,14 @@ os_init(void) {
     queue_init();
     hashtb_init();
     printk("The OS is now working!\n");
-   // test_setup();
-    wakeup(create_kthread(A));
-    wakeup(create_kthread(B));
+    init_hal();
+    init_timer();
+    init_tty();
+    wakeup(create_kthread(idle));
+    PCB * p = create_kthread(ttyd);
+    TTY = p->pid;
+    wakeup(p);
+    test();
     sti();
     while (TRUE) {
         wait_intr();

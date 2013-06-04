@@ -15,5 +15,6 @@ typedef struct Time Time;
 extern long jiffy;
 
 void get_time(Time *tm);
+void init_timer(void);
 
 #endif

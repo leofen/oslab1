@@ -7,6 +7,9 @@
 
 #define ANY -1
 #define MSG_SZ 80
+#define MSG_HWINTR -2
+
+extern boolean in_irq_handle;
 
 typedef struct Message {
     int32_t type;

@@ -20,6 +20,7 @@
 
 int pid = 1;
 
+
 hlist_head hashtb[HASH_NUMBER];
 
 PCB *
@@ -47,7 +48,7 @@ create_kthread(void *entry){
 
 void
 wakeup(PCB *pcb_to_wake){
-   list_add_after(&runq , &pcb_to_wake->semq); 
+    list_add_after(&runq , &pcb_to_wake->semq); 
 }
 
 void

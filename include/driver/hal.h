@@ -7,8 +7,13 @@
 #define MSG_DEVRD  1
 #define MSG_DEVWR  2
 
+typedef struct Msg_header{
+    int32_t type;
+    pid_t src,dest;
+}Msg_header;
+
 struct DevMessage {
-	Message header; // header与Message的头部定义保持一致即可(src, dst, type)
+	Msg_header header; // header与Message的头部定义保持一致即可(src, dst, type)
 	int dev_id;
 	off_t offset;
 	void *buf;
@@ -31,5 +36,5 @@ size_t dev_write(Device *dev, off_t offset, void *buf, size_t count);
 void hal_register(const char *name, pid_t pid, int dev_id);
 Device *hal_get(const char *name);
 void hal_list(void);
-
+void init_hal(void);
 #endif
