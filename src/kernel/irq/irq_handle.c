@@ -5,16 +5,18 @@ Func_Pointer irq_array[2][10];
 int array_index[2] = {0 , 0};
 boolean need_sched = TRUE;
 
-void irq_handle(TrapFrame *tf) {
-	in_irq_handle = TRUE;
-    int irq = tf->irq;
-	assert(irq >= 0);
+extern TSS tss;
 
-	if (irq < 1000 && irq != 128) {
-		// exception
-		cli();
-		printk("Unexpected exception #%d\n", irq);
-		printk(" errorcode %x\n", tf->err);
+void irq_handle(TrapFrame *tf) {
+    in_irq_handle = TRUE;
+    int irq = tf->irq;
+    assert(irq >= 0);
+
+    if (irq < 1000 && irq != 128) {
+        // exception
+        cli();
+        printk("Unexpected exception #%d\n", irq);
+        printk(" errorcode %x\n", tf->err);
         printk(" location  %d:%x, esp %x\n", tf->cs, tf->eip, tf);
         panic("unexpected exception");
     } else if (irq >= 1000 || irq ==128) {
@@ -29,6 +31,10 @@ void irq_handle(TrapFrame *tf) {
                               schedule();
                               need_sched = FALSE;
                               current_pcb = next_process();
+                              if (current_pcb->user_process == TRUE){
+                                  tss.esp0 = (uint32_t)current_pcb->kstack + KSTACK_SIZE; 
+                                  set_cr3((void *)va_to_pa(current_pcb->updir));
+                              }
                           }
                           break;
                       }
@@ -39,8 +45,14 @@ void irq_handle(TrapFrame *tf) {
                           break;
                       }
             case 128:{
+                         if (tf->eax == 0x8080)
+                             printk("capture user_process!!\n");
                          schedule();
                          current_pcb = next_process();
+                         if (current_pcb->user_process == TRUE){
+                             tss.esp0 = (uint32_t)current_pcb->kstack + KSTACK_SIZE; 
+                             set_cr3((void *)va_to_pa(current_pcb->updir));
+                         }
                          break;
                      }
             default:break;

@@ -16,6 +16,8 @@ typedef struct PCB {
     boolean interrupt_flag;
     Semaphore message;
     struct Message * message_addr;
+    boolean user_process;
+    PDE * updir;
     uint8_t kstack[KSTACK_SIZE];
 }PCB;
 
